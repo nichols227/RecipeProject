@@ -9,9 +9,9 @@ import heapq
 import time
 import json
 
-prim_methods = ['saut', 'bake', 'grill', 'roast', 'barbeque', 'broil', 'boil', 'poach', 'freeze', 'fry', 'steam', 'smoke', 'simmer', 'blanch', 'cook']
+prim_methods = ['saut', 'bake', 'grill', 'roast', 'barbeque', 'broil', 'boil', 'poach', 'freeze', 'fry', 'steam', 'smoke', 'simmer', 'blanch']
 other_methods = ['garnish', 'chop', 'grate', 'stir', 'shake', 'mince', 'crush', 'squeeze', 'mix', 'julienne', 'dice', 'peel', 'shave', 'knead', 'blend', 'brush', 'grease', 'season', 'pour', 'grind', 'whisk', 'chill', 'drain', 'combine', 'heat', 'refrigerate']
-non_descripts = ['flakes', 'powder', 'salt', 'oil', 'filets', 'sauce', 'jam', 'pepper', 'cheese', 'juice']
+non_descripts = ['flakes', 'powder', 'salt', 'oil', 'filets', 'sauce', 'jam', 'pepper', 'cheese', 'juice', 'leaves', 'noodles']
 all_tools = ['oven', 'pan', 'pot', 'wok', 'grater', 'whisk', 'ladle', 'grill', 'bowl', 'knife', 'colander', 'cutting board', 'spatula', 'funnel', 'peeler', 'strainer', 'rolling pin', 'baking dish', 'skillet', 'mortar and pestle', 'plastic wrap', 'deep-fryer', 'baking sheet', 'can opener', 'slow cooker', 'blender']
 
 def representRecipe(url):
@@ -128,7 +128,7 @@ def getSteps(soup, names):
 						methods_used.append(j)
 				elif j == 'and':
 					and_p = True
-				elif (j == 'minutes') or (j == 'seconds') or (j == 'hours'):
+				elif (j == 'minutes') or (j == 'seconds') or (j == 'hours') or (j == 'minute') or (j == 'second') or (j == 'hour'):
 					if 'time' in stepDict.keys():
 						stepDict['time'] += ' or '
 						if split_string[i-2] == 'to' and is_number(split_string[i-1]) and is_number(split_string[i-3]):
@@ -172,6 +172,6 @@ def is_number(s):
 
 			
 with open('recipe_representation.json', 'w') as outfile:
-	json.dump(representRecipe('http://allrecipes.com/recipe/best-steak-marinade-in-existence/detail.aspx?soid=home_pins_1'), outfile)
+	json.dump(representRecipe('http://allrecipes.com/Recipe/Spinach-Lasagna-III/Detail.aspx?soid=recs_recipe_2'), outfile)
 #pprint.pprint(representRecipe('http://allrecipes.com/Recipe/Chef-Johns-Chicken-Kiev/?prop31=10'))
 #pprint.pprint(representRecipe('http://allrecipes.com/Recipe/KISS-Salmon/Detail.aspx?soid=carousel_0_rotd&prop24=rotd'))
