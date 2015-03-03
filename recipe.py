@@ -171,6 +171,7 @@ def is_number(s):
         return False
 
 			
-print json.dumps(representRecipe('http://allrecipes.com/recipe/best-steak-marinade-in-existence/detail.aspx?soid=home_pins_1'))
+with open('recipe_representation.json', 'w') as outfile:
+	json.dump(representRecipe('http://allrecipes.com/recipe/best-steak-marinade-in-existence/detail.aspx?soid=home_pins_1'), outfile)
 #pprint.pprint(representRecipe('http://allrecipes.com/Recipe/Chef-Johns-Chicken-Kiev/?prop31=10'))
 #pprint.pprint(representRecipe('http://allrecipes.com/Recipe/KISS-Salmon/Detail.aspx?soid=carousel_0_rotd&prop24=rotd'))
