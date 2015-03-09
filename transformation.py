@@ -105,14 +105,14 @@ for item in kb:
 	kb[item]['lactose'] =  not kb[item]['lactose']
 	kb[item]['gluten'] =  not kb[item]['gluten']
 
-backupMeats = ['Bear','Beef','Beef heart','Beef liver','Beef tongue','Bone soup from allowable meats','Buffalo', 'Bison','Calf liver','Caribou','Goat','Ham','Horse','Kangaroo', 'Lamb','Marrow soup','Moose','Mutton','Opossum','Organ Meats','Pork','Bacon','Rabbit','Snake','Squirrel','Tripe','Turtle','Veal','Venison','Chicken','Chicken Liver','Cornish Game Hen','Duck','Duck Liver','Emu','Gizzards','Goose','Goose Liver','Grouse','Guinea Hen','Liver','Organs','Ostrich','Partridge','Pheasant','Quail','Squab','Turkey']
+backupMeats = ['bear','beef','beef heart','beef liver','beef tongue','bone soup from allowable meats','buffalo', 'bison','calf liver','caribou','goat','ham','horse','kangaroo', 'lamb','marrow soup','moose','mutton','opossum','organ meats','pork','bacon','rabbit','snake','squirrel','tripe','turtle','veal','venison','chicken','chicken liver','cornish game hen','duck','duck liver','emu','gizzards','goose','goose liver','grouse','guinea hen','liver','organs','ostrich','partridge','pheasant','quail','squab','turkey']
 nutritionFeatures = ['calorie','sodium','fat','carb','protein','fiber']
 
 
 def nutritionSimilarity(ingredient1, ingredient2, diffFeature):
 	nutritionDiff = 0
 	sameColor = False
-	if set(ingredient1['use']) & set(ingredient2['use']) and (diffFeature == '' or ingredient2[diffFeature]<ingredient1[diffFeature]):
+	if set(ingredient1['use']) & set(ingredient2['use']) and (diffFeature == '' or (ingredient2[diffFeature]<ingredient1[diffFeature] and diffFeature != 'protein') or (ingredient2[diffFeature]>ingredient1[diffFeature] and diffFeature == 'protein')):
 		for feature in nutritionFeatures:
 			if feature != diffFeature :
 				if type(ingredient1[feature]) == int or type(ingredient1[feature]) == float:
@@ -134,8 +134,8 @@ def makeNutritionTransformation(ingredient, feature):
 			if not diff[1] and diff[0]<mostSimilarValue:
 				mostSimilarValue = diff[0]
 				mostSimilarIngredient = item
-			elif diff[1] and diff[0]-.10<mostSimilarValue:
-				mostSimilarValue = diff[0]-.10
+			elif diff[1] and diff[0]-.20<mostSimilarValue:
+				mostSimilarValue = diff[0]-.20
 				mostSimilarIngredient = item
 
 	return mostSimilarIngredient
@@ -178,14 +178,14 @@ def makeLifestyleTransformations(data,lifestyle):
 
 	
 def main():
-	json_data=open('recipe_representation2.json')
+	json_data=open('recipe_representation4.json')
 
 	data = json.load(json_data)
 
-	makeLifestyleTransformations(data,'lactose')
+	#makeLifestyleTransformations(data,'lactose')
 						
 	
-	#makeAllNutritionTransformations(data,'fat')
+	makeAllNutritionTransformations(data,'protein')
 	
 	json_data.close()
 				
