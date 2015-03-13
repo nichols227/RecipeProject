@@ -14,6 +14,7 @@ liquidLactoseItems = ['milk','whole milk','whipping cream', 'creamer','cream', '
 liquidLactoseSubs = ['soy milk','coconut cream', 'coconut milk','lactose free milk']
 
 cheeses = ['cheddar cheese','feta cheese','feta','mozzarella cheese', 'gouda','pepperjack cheese', 'parmesan cheese','asiago cheese','blue cheese','romano cheese','brie']
+
 cheeseSubs = ['daiya shreds','rice vegan slices']
 
 highCalorieMeat = ['beef','mutton','cod','herring','salmon','lard','chicken','goose','turkey','bacon']
@@ -95,7 +96,7 @@ def transformation(data,transformTo):
 	elif transformTo == 'vegetarian':
 		originalList = meats
 		transformList = vegMeatSubs
-	elif transformTo == 'vegetarian':
+	elif transformTo == 'vegan':
 		originalList = meats
 		transformList = veganMeatSubs
 	elif transformTo == 'cheese':
@@ -173,13 +174,14 @@ def makeLowCal(data):
 	transformation(data, 'highCalSweet')
 
 def main():
-	json_data=open('recipe_representation4.json')
+	json_data=open('recipe_representation3.json')
 	data = json.load(json_data)
-	#for ingredient in data['ingredients']:
-	#	print ingredient['name']
-	#transformation(data,'highCalMeat')
-	#transformation(data,'highCalAdditive')
-	#transformation(data,'highCalSweet')
-	makeLowCal(data)
+
+
+	#transformation(data,'mexican')
+	
+	#makeLowCal(data)
+	
+	#makeLactoseFree(data)
 if __name__ == '__main__':
 	main()
