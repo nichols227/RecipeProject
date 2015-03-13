@@ -1,18 +1,15 @@
 import urllib2
 from bs4 import BeautifulSoup
-from HTMLParser import HTMLParser
-from htmlentitydefs import name2codepoint
 import pprint
 import collections
 import re
 import heapq
 import time
 import json
-
 prim_methods = ['saute', 'bake', 'grill', 'roast', 'barbeque', 'broil', 'boil', 'poach', 'freeze', 'fry', 'steam', 'smoke', 'simmer', 'blanch']
 other_methods = ['sprinkle', 'melt', 'garnish', 'chop', 'grate', 'stir', 'shake', 'mince', 'crush', 'squeeze', 'mix', 'julienne', 'dice', 'peel', 'shave', 'knead', 'blend', 'brush', 'grease', 'season', 'pour', 'grind', 'whisk', 'chill', 'drain', 'combine', 'heat', 'refrigerate']
-non_descripts = ['flakes', 'powder', 'salt', 'oil', 'filets', 'sauce', 'jam', 'pepper', 'cheese', 'juice', 'leaves', 'noodles', 'wine', 'sugar', 'fillets']
-all_tools = ['thermometer', 'aluminum foil', 'saucepan', 'oven', 'pan', 'pot', 'wok', 'grater', 'whisk', 'ladle', 'grill', 'bowl', 'knife', 'colander', 'cutting board', 'spatula', 'funnel', 'peeler', 'strainer', 'rolling pin', 'baking dish', 'skillet', 'mortar and pestle', 'plastic wrap', 'deep-fryer', 'baking sheet', 'can opener', 'slow cooker', 'blender']
+non_descripts = ['flakes', 'powder', 'salt', 'oil', 'filets', 'sauce', 'jam', 'pepper', 'cheese', 'juice', 'leaves', 'noodles', 'wine', 'sugar', 'fillets', 'thighs', 'wings']
+all_tools = ['casserole dish', 'thermometer', 'aluminum foil', 'saucepan', 'oven', 'pan', 'pot', 'wok', 'grater', 'whisk', 'ladle', 'grill', 'bowl', 'knife', 'colander', 'cutting board', 'spatula', 'funnel', 'peeler', 'strainer', 'rolling pin', 'baking dish', 'skillet', 'mortar and pestle', 'plastic wrap', 'deep-fryer', 'baking sheet', 'can opener', 'slow cooker', 'blender']
 
 def representRecipe(url):
 	soup = BeautifulSoup(urllib2.urlopen(url).read())
@@ -23,6 +20,7 @@ def representRecipe(url):
 		ingred_names.append(ing['name'])
 	finalDict = getSteps(soup, ingred_names)
 	finalDict['ingredients'] = ingreds
+	finalDict['recipe_name'] = soup.find('h1', id='itemTitle').string
 	return finalDict
 
 def getIngreds(soup):
@@ -229,8 +227,12 @@ def is_number(s):
     except ValueError:
         return False
 
-			
-with open('recipe_representation4.json', 'w') as outfile:
-	json.dump(representRecipe('http://allrecipes.com/Recipe/Steak-Soup/Detail.aspx?event8=1&prop24=SR_Thumb&e11=steak&e8=Quick%20Search&event10=1&e7=Home%20Page&soid=sr_results_p1i2'), outfile)
-#pprint.pprint(representRecipe('http://allrecipes.com/Recipe/Chef-Johns-Chicken-Kiev/?prop31=10'))
-#pprint.pprint(representRecipe('http://allrecipes.com/Recipe/KISS-Salmon/Detail.aspx?soid=carousel_0_rotd&prop24=rotd'))
+
+def returnForAutoGrader(url):
+	json.dumps(representRecipe(url))
+		
+#with open('recipe_representation.json', 'w') as outfile:
+#	json.dump(representRecipe('http://allrecipes.com/Recipe/Honey-Dijon-Chicken-With-A-Kick/Detail.aspx?soid=recs_recipe_9'), outfile)
+#print representRecipe('http://allrecipes.com/Recipe/Pizza-Casserole/Detail.aspx?soid=carousel_0_rotd&prop24=rotd')
+#print json.dumps(representRecipe('http://allrecipes.com/Recipe/Easy-Garlic-Broiled-Chicken/'))
+
