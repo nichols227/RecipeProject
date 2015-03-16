@@ -227,6 +227,13 @@ def is_number(s):
     except ValueError:
         return False
 
+<<<<<<< HEAD:recipe.py
+			
+with open('recipe_representation5.json', 'w') as outfile:
+	json.dump(representRecipe('http://allrecipes.com/Recipe/Baked-Lemon-Chicken-with-Mushroom-Sauce/Detail.aspx?evt19=1&referringHubId=664'), outfile)
+#pprint.pprint(representRecipe('http://allrecipes.com/Recipe/Chef-Johns-Chicken-Kiev/?prop31=10'))
+#pprint.pprint(representRecipe('http://allrecipes.com/Recipe/KISS-Salmon/Detail.aspx?soid=carousel_0_rotd&prop24=rotd'))
+=======
 
 def returnForAutoGrader(url):
 	json.dumps(representRecipe(url))
@@ -236,3 +243,4 @@ def returnForAutoGrader(url):
 #print representRecipe('http://allrecipes.com/Recipe/Pizza-Casserole/Detail.aspx?soid=carousel_0_rotd&prop24=rotd')
 print json.dumps(representRecipe('http://allrecipes.com/Recipe/Chef-Johns-Chicken-and-Biscuits/Detail.aspx?soid=carousel_0_rotd&prop24=rotd'))
 
+>>>>>>> 4eb841b07b3b42ffcb21a4698d55567a0874c8ac:Project Folder/recipe.py

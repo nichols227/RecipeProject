@@ -105,13 +105,14 @@ for item in kb:
 	kb[item]['lactose'] =  not kb[item]['lactose']
 	kb[item]['gluten'] =  not kb[item]['gluten']
 
-backupMeats = ['bear','beef','beef heart','beef liver','beef tongue','bone soup from allowable meats','buffalo', 'bison','calf liver','caribou','goat','ham','horse','kangaroo', 'lamb','marrow soup','moose','mutton','opossum','organ meats','pork','bacon','rabbit','snake','squirrel','tripe','turtle','veal','venison','chicken','chicken liver','cornish game hen','duck','duck liver','emu','gizzards','goose','goose liver','grouse','guinea hen','liver','organs','ostrich','partridge','pheasant','quail','squab','turkey']
+meats = ['bear','beef','beef heart','beef liver','beef tongue','bone soup from allowable meats','buffalo', 'bison','calf liver','caribou','goat','ham','horse','kangaroo', 'lamb','marrow soup','moose','mutton','opossum','organ meats','pork','bacon','rabbit','snake','squirrel','tripe','turtle','veal','venison','chicken','chicken liver','cornish game hen','duck','duck liver','emu','gizzards','goose','goose liver','grouse','guinea hen','liver','organs','ostrich','partridge','pheasant','quail','squab','turkey']
 nutritionFeatures = ['calorie','sodium','fat','carb','protein','fiber']
 
 
 def nutritionSimilarity(ingredient1, ingredient2, diffFeature):
 	nutritionDiff = 0
 	sameColor = False
+	sameSpiciness = False
 	if set(ingredient1['use']) & set(ingredient2['use']) and (diffFeature == '' or (ingredient2[diffFeature]<ingredient1[diffFeature] and diffFeature != 'protein') or (ingredient2[diffFeature]>ingredient1[diffFeature] and diffFeature == 'protein')):
 		for feature in nutritionFeatures:
 			if feature != diffFeature :
@@ -122,8 +123,10 @@ def nutritionSimilarity(ingredient1, ingredient2, diffFeature):
 						nutritionDiff += 0			
 		if set(ingredient1['color']) & set(ingredient2['color']):
 			sameColor = True
-		return [nutritionDiff, sameColor]
-	return [maxint, False]
+		if ingredient1['spiciness'] == ingredient2['spiciness']:
+			sameSpiciness = True
+		return [nutritionDiff, sameColor, sameSpiciness]
+	return [maxint, False, False]
 	
 def makeNutritionTransformation(ingredient, feature):
 	mostSimilarValue = maxint
@@ -131,12 +134,15 @@ def makeNutritionTransformation(ingredient, feature):
 	for item in kb:
 		if item != ingredient:
 			diff = nutritionSimilarity(kb[ingredient],kb[item],feature)
-			if not diff[1] and diff[0]<mostSimilarValue:
-				mostSimilarValue = diff[0]
+			score = diff[0]
+			if diff[1]:
+				score -=.2
+			if diff[2]:
+				score -=.2
+			if score<mostSimilarValue:
+				mostSimilarValue = score
 				mostSimilarIngredient = item
-			elif diff[1] and diff[0]-.20<mostSimilarValue:
-				mostSimilarValue = diff[0]-.20
-				mostSimilarIngredient = item
+
 
 	return mostSimilarIngredient
 	
@@ -165,12 +171,15 @@ def makeLifestyleTransformations(data,lifestyle):
 				if item != ingredient['name'] and kb[item][lifestyle] == True:
 					diff = nutritionSimilarity(kb[ingredient['name']],kb[item],'')
 					#print item,diff
-					if not diff[1] and diff[0]<mostSimilarValue:
-						mostSimilarValue = diff[0]
+					score = diff[0]
+					if diff[1]:
+						score -=.2
+					if diff[2]:
+						score -=.2
+					if score<mostSimilarValue:
+						mostSimilarValue = score
 						mostSimilarIngredient = item
-					elif diff[1] and diff[0]-.20<mostSimilarValue:
-						mostSimilarValue = diff[0]-.20
-						mostSimilarIngredient = item
+
 			print ingredient['name']
 			print mostSimilarIngredient
 			print
@@ -181,11 +190,31 @@ def main():
 	json_data=open('recipe_representation4.json')
 
 	data = json.load(json_data)
-
-	#makeLifestyleTransformations(data,'lactose')
-						
 	
-	makeAllNutritionTransformations(data,'protein')
+	cuisine = 'indian'
+	for ingredient in data['ingredients']:
+		if ingredient['name'] in kb.keys() and 	cuisine not in kb[ingredient['name']]['cuisine']:
+			print ingredient['name']
+			mostSimilarValue = maxint
+			mostSimilarIngredient = ''
+			for item in kb:
+				if item != ingredient['name'] and cuisine in kb[item]['cuisine']:
+					diff = nutritionSimilarity(kb[ingredient['name']],kb[item],'')
+					#print item,diff
+					score = diff[0]
+					if diff[1]:
+						score -=.2
+					if diff[2]:
+						score -=.2
+					if score<mostSimilarValue:
+						mostSimilarValue = score
+						mostSimilarIngredient = item
+
+			#print ingredient['name']
+			#print mostSimilarIngredient
+			#print
+	#makeLifestyleTransformations(data,'lactose')					
+	#makeAllNutritionTransformations(data,'carb')
 	
 	json_data.close()
 				
