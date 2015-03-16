@@ -234,5 +234,5 @@ def returnForAutoGrader(url):
 #with open('recipe_representation.json', 'w') as outfile:
 #	json.dump(representRecipe('http://allrecipes.com/Recipe/Honey-Dijon-Chicken-With-A-Kick/Detail.aspx?soid=recs_recipe_9'), outfile)
 #print representRecipe('http://allrecipes.com/Recipe/Pizza-Casserole/Detail.aspx?soid=carousel_0_rotd&prop24=rotd')
-#print json.dumps(representRecipe('http://allrecipes.com/Recipe/Pan-Seared-Tilapia/Detail.aspx?soid=carousel_0_rotd&prop24=rotd'))
+print json.dumps(representRecipe('http://allrecipes.com/Recipe/Chef-Johns-Chicken-and-Biscuits/Detail.aspx?soid=carousel_0_rotd&prop24=rotd'))
 

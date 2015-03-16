@@ -1,5 +1,5 @@
 from Tkinter import Tk, W, E, BOTH, N, S, Button, Entry, StringVar
-from ttk import Style, Frame, Label
+from ttk import Style, Label, Frame
 from PIL import Image, ImageTk
 import tkFont
 import urllib2
@@ -63,11 +63,11 @@ def makeGui():
 	mainframe.rowconfigure(15, pad=3, weight=1)
 
 	getRecipeLabel = Label(allframe, text='Enter AllRecipes URL: ')
-	getRecipeLabel.grid(row=0, column=0, columnspan=3)
+	getRecipeLabel.grid(row=0, column=0)
 	urlEntry = Entry(allframe)
-	urlEntry.grid(row=0, column=3, columnspan=6)
+	urlEntry.grid(row=0, column=1)
 	urlButton = Button(allframe, text='Parse')
-	urlButton.grid(row=0, column=9, columnspan=2)
+	urlButton.grid(row=0, column=2)
 	urlButton.bind('<Button-1>', parseRecipe)
 	root.mainloop()
 
@@ -75,14 +75,8 @@ def fillGui(root, url):
 	recDict = representRecipe(url)
 	stepBool = 0
 
-	titleLabel = Label(root, text=recDict['recipe_name'])
-	titleLabel.grid(row=1, column=0, columnspan=4)
-	toolsLabel = Label(root, text='Tools Used:')
-	toolsLabel.grid(row=2, column=0, columnspan=2)
-	methodsLabel = Label(root, text='Methods Used:')
-	methodsLabel.grid(row=2, column=2, columnspan=2)
-	ingredsLabel = Label(root, text='Ingredients Used:')
-	ingredsLabel.grid(row=2, column=4, columnspan=3)
+	#titleLabel = Label(root, text=recDict['recipe_name'])
+	#titleLabel.grid(row=1, column=0, columnspan=4)
 
 	def showIngredLabel(event):
 		for widget in ingredTextFrame.winfo_children():
@@ -141,14 +135,22 @@ def fillGui(root, url):
 	else:
 		rowOffset = 0
 
+	toolFrame = Frame(root, borderwidth=5)
+	toolFrame.grid(row=2, column=0, columnspan=2, rowspan=(((len(recDict['cooking tools']) - 1)/2) + 2))
+	toolsLabel = Label(toolFrame, text='Tools Used:')
+	toolsLabel.grid(row=2, column=0, columnspan=2)
 	for i in xrange(len(recDict['cooking tools'])):
 		textString = '-' + recDict['cooking tools'][i]
-		toolLabel = Label(root, text=textString)
+		toolLabel = Label(toolFrame, text=textString)
 		toolLabel.grid(row=(i/2) + 3, column=i%2)
 
+	methFrame = Frame(root, borderwidth=5)
+	methFrame.grid(row=2, column=2, columnspan=2, rowspan=(((len(recDict['cooking methods']) - 1)/2) + 2))
+	methodsLabel = Label(methFrame, text='Methods Used:')
+	methodsLabel.grid(row=2, column=2, columnspan=2)
 	for i in xrange(len(recDict['cooking methods'])):
 		textString = '-' + recDict['cooking methods'][i]
-		methLabel = Label(root, text=textString)
+		methLabel = Label(methFrame, text=textString)
 		methLabel.grid(row=(i/2) + 3, column=(i%2) + 2)
 
 	if len(recDict['ingredients']) > (18 + (3 * rowOffset)):	
@@ -158,9 +160,13 @@ def fillGui(root, url):
 	primLabel = Label(root, text=textString)
 	primLabel.grid(row=8 + rowOffset, column=0, columnspan=4)
 
+	ingredFrame = Frame(root, borderwidth=5)
+	ingredFrame.grid(row=2, column=4, columnspan=3, rowspan=(((len(recDict['ingredients']) - 1)/3) + 2))
+	ingredsLabel = Label(ingredFrame, text='Ingredients Used:')
+	ingredsLabel.grid(row=2, column=4, columnspan=3)
 	for i in xrange(len(recDict['ingredients'])):
-		ingButton = Button(root, text=recDict['ingredients'][i]['name'])
-		ingButton.grid(row=(i/3)+3, column=(i%3) + 4)
+		ingButton = Button(ingredFrame, text=recDict['ingredients'][i]['name'])
+		ingButton.grid(row=(i/3)+3, column=(i%3) + 4, sticky=N+E+S+W)
 		ingButton.bind('<Button-1>', showIngredLabel)
 
 	ingredTextFrame = Frame(root)
