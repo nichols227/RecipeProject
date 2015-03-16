@@ -8,7 +8,7 @@ import time
 import json
 prim_methods = ['saute', 'bake', 'grill', 'roast', 'barbeque', 'broil', 'boil', 'poach', 'freeze', 'fry', 'steam', 'smoke', 'simmer', 'blanch']
 other_methods = ['sprinkle', 'melt', 'garnish', 'chop', 'grate', 'stir', 'shake', 'mince', 'crush', 'squeeze', 'mix', 'julienne', 'dice', 'peel', 'shave', 'knead', 'blend', 'brush', 'grease', 'season', 'pour', 'grind', 'whisk', 'chill', 'drain', 'combine', 'heat', 'refrigerate']
-non_descripts = ['flakes', 'powder', 'salt', 'oil', 'filets', 'sauce', 'jam', 'pepper', 'cheese', 'juice', 'leaves', 'noodles', 'wine', 'sugar', 'fillets', 'thighs', 'wings']
+non_descripts = ['seeds', 'whites', 'white', 'crumbs', 'flakes', 'powder', 'salt', 'oil', 'filets', 'sauce', 'jam', 'pepper', 'cheese', 'juice', 'leaves', 'noodles', 'wine', 'sugar', 'fillets', 'thighs', 'wings']
 all_tools = ['casserole dish', 'thermometer', 'aluminum foil', 'saucepan', 'oven', 'pan', 'pot', 'wok', 'grater', 'whisk', 'ladle', 'grill', 'bowl', 'knife', 'colander', 'cutting board', 'spatula', 'funnel', 'peeler', 'strainer', 'rolling pin', 'baking dish', 'skillet', 'mortar and pestle', 'plastic wrap', 'deep-fryer', 'baking sheet', 'can opener', 'slow cooker', 'blender']
 
 def representRecipe(url):
@@ -226,21 +226,12 @@ def is_number(s):
         return True
     except ValueError:
         return False
-
-<<<<<<< HEAD:recipe.py
 			
-with open('recipe_representation5.json', 'w') as outfile:
-	json.dump(representRecipe('http://allrecipes.com/Recipe/Baked-Lemon-Chicken-with-Mushroom-Sauce/Detail.aspx?evt19=1&referringHubId=664'), outfile)
-#pprint.pprint(representRecipe('http://allrecipes.com/Recipe/Chef-Johns-Chicken-Kiev/?prop31=10'))
-#pprint.pprint(representRecipe('http://allrecipes.com/Recipe/KISS-Salmon/Detail.aspx?soid=carousel_0_rotd&prop24=rotd'))
-=======
-
 def returnForAutoGrader(url):
 	json.dumps(representRecipe(url))
 		
 #with open('recipe_representation.json', 'w') as outfile:
 #	json.dump(representRecipe('http://allrecipes.com/Recipe/Honey-Dijon-Chicken-With-A-Kick/Detail.aspx?soid=recs_recipe_9'), outfile)
 #print representRecipe('http://allrecipes.com/Recipe/Pizza-Casserole/Detail.aspx?soid=carousel_0_rotd&prop24=rotd')
-print json.dumps(representRecipe('http://allrecipes.com/Recipe/Chef-Johns-Chicken-and-Biscuits/Detail.aspx?soid=carousel_0_rotd&prop24=rotd'))
+#print json.dumps(representRecipe('http://allrecipes.com/Recipe/Chef-Johns-Chicken-and-Biscuits/Detail.aspx?soid=carousel_0_rotd&prop24=rotd'))
 
->>>>>>> 4eb841b07b3b42ffcb21a4698d55567a0874c8ac:Project Folder/recipe.py

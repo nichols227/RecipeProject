@@ -130,7 +130,7 @@ def transformation(data,originalList,transformList, type):
 						sub = choice(transformList)
 				
 				else:
-					print "color!"
+					#print "color!"
 					for candidate in transformList:
 						if candidate not in subbedList and candidate in color and candidate not in allIngredients:
 							sub = candidate
@@ -148,7 +148,7 @@ def transformation(data,originalList,transformList, type):
 				ingredient['name'] = sub
 
 				tupleList.append((replaced,sub,type))
-				print replaced + " replaced with " + sub
+				#print replaced + " replaced with " + sub
 				break
 	return tupleList
 
@@ -156,7 +156,7 @@ def removeWithoutReplace(data, listToRemove):
 	for ingredient in data['ingredients']:
 		for itemToReplace in listToRemove:
 			if itemToReplace in ingredient['name']:
-				print "Remove " +ingredient['name']
+				#print "Remove " +ingredient['name']
 							
 def makeLactoseFree(data):
 	tupleList = []
@@ -217,7 +217,7 @@ def main():
 	data = json.load(json_data)
 	
 	tupleList = makeVegan(data)
-	print tupleList
+	#print tupleList
 	
 	#for step in data['steps']:
 	#	print step['ingredients used']
