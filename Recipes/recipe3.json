@@ -1,0 +1,114 @@
+
+
+    "url": "http://allrecipes.com/recipe/easy-after-work-chicken-francaise/",
+    "ingredients": [{
+            "name": ["all-purpose flour", "flour"],
+            "quantity": [2],
+            "measurement": ["cup", "cups"],
+            "descriptor": ["all-purpose", "none"],
+            "preparation": [],
+            "prep-description": [],
+            "max": 4
+        },
+        {
+            "name": ["salt", "salt to taste", "ground black pepper", "ground black pepper to taste", "black pepper", "black pepper to taste", "pepper", "pepper to taste", "salt and ground black pepper", "salt and ground black pepper to taste", "salt and black pepper", "salt and black pepper to taste", "salt and pepper", "salt and pepper to taste"],
+            "quantity": [0,1,"none"],
+            "measurement": [],
+            "descriptor": ["to taste", "taste", "ground", "black", "ground black"],
+            "preparation": ["ground", "none"],
+            "prep-description": [],
+            "max": 4
+        },
+        {
+            "name": ["thin sliced chicken breast cutlets", "thin sliced chicken breast", "thin sliced chicken cutlets", "sliced chicken breast cutlets", "sliced chicken breast", "sliced chicken cutlets", "sliced chicken", "thin sliced chicken", "chicken breast cutlets", "chicken breast", "cutlets", "chicken cutlets", "breast cutlets"],
+            "quantity": [1],
+            "measurement": ["pound","pounds"],
+            "descriptor": ["thin sliced", "sliced", "chicken breast", "breast", "chicken", "cutlets", "thin-sliced chicken breast", "none"],
+            "preparation": ["thin sliced", "sliced", "none"],
+            "prep-description": ["thin"],
+            "max": 6
+        },
+        {
+            "name": ["eggs"],
+            "quantity": [2],
+            "measurement": ["count", "unit", "eggs", "egg", "discrete"],
+            "descriptor": ["beaten", "none"],
+            "preparation": ["beaten", "none"],
+            "prep-description": [],
+            "max": 4
+        },
+        {
+            "name": ["vegetable oil", "oil"],
+            "quantity": [0.5],
+            "measurement": ["cup","cups"],
+            "descriptor": ["vegetable", "none"],
+            "preparation": [],
+            "prep-description": [],
+            "max": 4
+        },
+        {
+            "name": ["butter"],
+            "quantity": [0.5],
+            "measurement": ["cup","cups"],
+            "descriptor": [],
+            "preparation": [],
+            "prep-description": [],
+            "max": 3
+        },
+        {
+            "name": ["lemon juice", "juice"],
+            "quantity": [0.25],
+            "measurement": ["cup","cups"],
+            "descriptor": ["lemon", "none"],
+            "preparation": [],
+            "prep-description": [],
+            "max": 4
+        },
+	{
+            "name": ["broth", "chicken broth"],
+            "quantity": [2],
+            "measurement": ["cup","cups"],
+            "descriptor": ["chicken","none"],
+            "preparation": [],
+            "prep-description": [],
+            "max": 4
+        },
+	{
+            "name": ["flour", "all-purpose flour"],
+            "quantity": [2],
+            "measurement": ["tablespoon","tablespoons"],
+            "descriptor": ["all-purpose", "none"],
+            "preparation": [],
+            "prep-description": [],
+            "max": 4
+        },
+	{
+            "name": ["parsley", "fresh parsley"],
+            "quantity": [4],
+            "measurement": ["sprig","sprigs"],
+            "descriptor": ["fresh", "none"],
+            "preparation": [],
+            "prep-description": [],
+            "max": 4
+        },
+	{
+            "name": ["lemon", "lemon, cut", "lemon, cut into wedges"],
+            "quantity": [1],
+            "measurement": ["count","lemons","lemon","discrete","unit"],
+            "descriptor": ["cut", "cut into wedges", "none"],
+            "preparation": ["cut", "cut into wedges", "none"],
+            "prep-description": [],
+            "max": 5
+        }
+    ],
+    "max": {
+        "ingredients": 46,
+        "primary cooking method": 1,
+        "cooking tools": 5,
+        "cooking methods": 21
+    },
+    "primary cooking method": "pan-fry",
+    "cooking methods":["coat","coating","season","shake","shaking","dip","dipping","heat","heating","fry","pan-fry","melt","melting","melted","cook","stir","add","simmer","return","simmering","serve"],
+    "cooking tools": ["cups","skillet","pan","plate","tablespoons"]
+}
+
