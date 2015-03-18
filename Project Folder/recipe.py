@@ -11,6 +11,7 @@ other_methods = ['brown', 'dip', 'toss', 'serve', 'cook', 'add', 'sprinkle', 'me
 non_descripts = ['breast', 'cutlets', 'seeds', 'whites', 'white', 'crumbs', 'flakes', 'powder', 'salt', 'oil', 'filets', 'sauce', 'jam', 'pepper', 'cheese', 'juice', 'leaves', 'noodles', 'wine', 'sugar', 'fillets', 'thighs', 'wings']
 all_tools = ['stove', 'casserole dish', 'thermometer', 'aluminum foil', 'saucepan', 'oven', 'pan', 'pot', 'wok', 'grater', 'whisk', 'ladle', 'grill', 'bowl', 'knife', 'colander', 'cutting board', 'spatula', 'funnel', 'peeler', 'strainer', 'rolling pin', 'baking dish', 'skillet', 'mortar and pestle', 'plastic wrap', 'deep-fryer', 'baking sheet', 'can opener', 'slow cooker', 'blender', 'knife', 'microwave', 'baster', 'pan', 'microwave safe bowl']
 
+#Overall Function that takes a url and creates the dictionary
 def representRecipe(url):
 	soup = BeautifulSoup(urllib2.urlopen(url).read())
 	recipeDict = {}
@@ -23,6 +24,7 @@ def representRecipe(url):
 	finalDict['recipe_name'] = soup.find('h1', id='itemTitle').string
 	return finalDict
 
+#Half of the recipe parser that gets the ingredients and puts them in various functions
 def getIngreds(soup):
 	ingredients = []
 	ingreds = soup.find_all('p', 'fl-ing')
@@ -34,6 +36,7 @@ def getIngreds(soup):
 		newDict = {'name': 'none', 'quantity': 'none', 'size': 'none', 'measurement': 'none', 'descriptor': 'none', 'preparation': 'none', 'prep-description': 'none'}
 		if(len(labels) > 1):
 			commas = labels[1].split(',')
+			#special skinless, boneless case that caused roblems for the system
 			if commas[0] == 'skinless' or commas[0] == 'boneless':
 				chicken_name = commas[1][1:].split(' ')
 				newDict['name'] = ' '.join(chicken_name[1:3])
@@ -43,11 +46,13 @@ def getIngreds(soup):
 				ingredients.append(newDict)
 				continue
 
+			#Normal parsing for anem
 			name = commas[0].split(' ')
 			preps = []
 			prep_descripts = []
 			if len(name) > 1:
 				count = 0
+				#Bring everything ending with an 'ed' to prep and everything with a 'ly' to prep-description
 				while count < len(name):
 					pre = name[count]
 					if pre.endswith('ed') and pre != 'red':
@@ -58,6 +63,7 @@ def getIngreds(soup):
 						name.pop(count)
 					else:
 						count += 1
+			#Parses name based on what the last word is - if it is in the non-descripts array, or the array that holds words that need the prefix before, function finds the first prefix that can be used
 			if len(name) > 1:
 				if (name[-1] in non_descripts):
 					if (len(name) == 2):
@@ -79,6 +85,7 @@ def getIngreds(soup):
 			else:
 				newDict['name'] = name[0].lower()
 
+			#Gets the measurement and quantity of the ingredient
 			meas = labels[0]
 			paran = meas.find('(')
 			if paran != -1:
@@ -102,6 +109,7 @@ def getIngreds(soup):
 					newDict['quantity'] = ' '.join(amts[:-1])
 				newDict['measurement'] = amts[-1]
 			
+			#Combines any previously found prep and prep-desctrion attributes, and also looks for anything after commas for prep
 			if len(commas) > 1:
 				prep = commas[1][1:].split(' ')
 				if len(prep) > 1:
@@ -149,6 +157,8 @@ def getIngreds(soup):
 
 	return ingredients
 
+
+#Function that takes the directions and parses them into steps and what methods, tools, and ingredients are used in those steps
 def getSteps(soup, names):
 	finalDict = {}
 	primary = []
@@ -165,6 +175,7 @@ def getSteps(soup, names):
 			stepDict = {}
 
 
+			#First checks for methods that are written after commas
 			stepDict['step'] = step
 			step = step.lower()
 			step_comma = step.split(', ')
@@ -189,6 +200,7 @@ def getSteps(soup, names):
 			split_string = re.split(',? |\.', step)
 			and_p = False
 
+			#Then gets rid of commas and finds methods at the start of the step of after the words 'and' or 'then'
 			for i, j in enumerate(split_string):
 				if j == 'and' or j== 'then':
 					and_p = True
@@ -227,6 +239,7 @@ def getSteps(soup, names):
 					else:
 						stepDict['time'] = ' '.join(split_string[i-1:i+1])
 
+			#Finds any ingredient names i nthe stirng. Splits the string into n-grams absed on the size of the name, but then checks the ingredients for just one fo the words in case the recipe didn't list the full word
 			step_commaless = re.sub(r'\.|,', '',step).split(' ')
 			for name in names:
 				N = len(name.split(' '))
@@ -245,6 +258,7 @@ def getSteps(soup, names):
 								if name not in ings_used:
 									ings_used.append(name)
 
+			#Uses the same process as above to find tools in the step string
 			for tool in all_tools:
 				N = len(tool.split(' '))
 				grams = [' '.join(step_commaless[i:i+N]) for i in xrange(len(step_commaless) - N + 1)]
@@ -268,16 +282,13 @@ def getSteps(soup, names):
 		finalDict['primary cooking method'] = 'none'
 	return finalDict
 
+#Checks to make sure measurement is a number
 def is_number(s):
     try:
         float(s)
         return True
     except ValueError:
         return False
-			
-def returnForAutoGrader(url):
-	json.dumps(representRecipe(url))
-		
 
 #Your URL goes here:
 url = None

@@ -6,6 +6,7 @@ import transformation2
 
 fillers = ['or', 'the', 'and', 'to', 'of', 'in', 'a']
 
+#Function that creates GUI
 def makeGui():
 	root = Tk()
 	root.title("Recipe Parser")
@@ -69,6 +70,7 @@ def makeGui():
 
 	root.mainloop()
 
+#Fills in GUI that's already been made with ingredient information
 def fillGui(root, url, **keyArguments):
 	titleFont = tkFont.Font(weight='bold', size=10)
 
@@ -78,6 +80,7 @@ def fillGui(root, url, **keyArguments):
 		recDict = representRecipe(url)
 	stepBool = 0
 
+	#Function called if transformation button is pressed. Refills in GUI
 	def transformRecipe(event):
 		transformSplit = event.widget['text'].split(' ')
 		transformSplit[0] = transformSplit[0].lower()
@@ -95,6 +98,7 @@ def fillGui(root, url, **keyArguments):
 		fillGui(root, url, newRecipe=recDict, replacedList=finalTuple)
 
 
+	#Cretaes differnet transformation buttons
 	lactoseButton = Button(root, text='Make Lactose Free')
 	lactoseButton.grid(row=0, column=3, sticky=N+E+W+S)
 	lactoseButton.bind('<Button-1>', transformRecipe)
@@ -146,6 +150,7 @@ def fillGui(root, url, **keyArguments):
 	titleLabel = Label(root, text=recDict['recipe_name'], font=titleFont)
 	titleLabel.grid(row=1, column=0, columnspan=3)
 
+	#Function called when ingredient is pressed to show labe
 	def showIngredLabel(event):
 		for widget in ingredTextFrame.winfo_children():
 			widget.destroy()
@@ -155,6 +160,7 @@ def fillGui(root, url, **keyArguments):
 				fillIngredLabel(ingredTextFrame, ingred)
 				return
 
+	#Function called when left button is pressed for the step part of the GUI, cgoing back a step level
 	def leftStep(event):
 		global stepBool 
 		stepBool = 1
@@ -167,6 +173,7 @@ def fillGui(root, url, **keyArguments):
 		fillStep(stepFrame, recDict['steps'][num-1], rowOffset)
 		stepTextVar.set(str(num))
 
+	#Function called when right button is pressed for the step part of the GUI, going forward a step level
 	def rightStep(event):
 		global stepBool
 		stepBool = 1
@@ -179,6 +186,7 @@ def fillGui(root, url, **keyArguments):
 		fillStep(stepFrame, recDict['steps'][num-1], rowOffset)
 		stepTextVar.set(str(num))
 
+	#Function called when the text entry is change fort the step part of the GUI, goign to that step
 	def stepChange(a, b, c):
 		global stepBool
 		if stepBool == 1:
@@ -196,6 +204,7 @@ def fillGui(root, url, **keyArguments):
 				num = len(recDict['steps'])
 			fillStep(stepFrame, recDict['steps'][num-1], rowOffset)
 
+	#Addes frames for the different parts of the GUI
 	if len(recDict['cooking tools']) > 10:
 		rowOffset = (len(recDict['cooking tools']) - 9)/2
 	elif len(recDict['cooking methods']) > len(recDict['cooking tools']) and len(recDict['cooking methods']) > 10:
@@ -279,7 +288,7 @@ def fillGui(root, url, **keyArguments):
 
 	fillStep(stepFrame, recDict['steps'][0], rowOffset)
 
-
+#Fills in the Ingredient Label when a new ingredient button is pressed
 def fillIngredLabel(root, inDict):
 	titleFont = tkFont.Font(weight='bold', size=10)
 
@@ -304,6 +313,7 @@ def fillIngredLabel(root, inDict):
 	sizeLabel = Label(root, text='Size ' + inDict['size'], bg='#ffffff')
 	sizeLabel.grid(row=8, column=7, columnspan=3)
 
+#Fills in the Step Frame of the GUI whenever the step part is changed
 def fillStep(root, stepDict, rowOffset):
 	titleFont = tkFont.Font(weight='bold', size=10)
 
@@ -342,6 +352,7 @@ def fillStep(root, stepDict, rowOffset):
 		meLabel = Label(methFrame, text=textString, bg='#d1cdcd')
 		meLabel.grid(row=(i/2)+12+rowOffset, column=(i%2)+8)
 
+#Capitalization Function
 def capit(strg):
 	strArr = strg.split(' ')
 	startingStr = strArr[0].capitalize()
