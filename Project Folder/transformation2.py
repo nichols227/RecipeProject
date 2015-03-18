@@ -152,12 +152,13 @@ def transformation(data,originalList,transformList, type):
 				break
 	return tupleList
 
-def removeWithoutReplace(data, listToRemove):
-	for ingredient in data['ingredients']:
-		for itemToReplace in listToRemove:
-			if itemToReplace in ingredient['name']:
+#def removeWithoutReplace(data, listToRemove):
+#	for ingredient in data['ingredients']:
+#		for itemToReplace in listToRemove:
+#			if itemToReplace in ingredient['name']:
 				#print "Remove " +ingredient['name']
-							
+
+						
 def makeLactoseFree(data):
 	tupleList = []
 	tupleList +=transformation(data, cheeses, cheeseSubs, "Lactose Free")

@@ -129,7 +129,7 @@ def getIngreds(soup):
 			for i in xrange(len(taste)):
 				if taste[i] == 'to':
 					newDict['name'] = ' '.join(taste[0:i])
-					newDict['descriptor'] = ' '.join(taste[i:])
+					newDict['measurement'] = ' '.join(taste[i:])
 					break
 			else:
 				newDict['name'] = ' '.join(taste)
@@ -230,8 +230,13 @@ def is_number(s):
 def returnForAutoGrader(url):
 	json.dumps(representRecipe(url))
 		
-#with open('recipe_representation.json', 'w') as outfile:
-#	json.dump(representRecipe('http://allrecipes.com/Recipe/Honey-Dijon-Chicken-With-A-Kick/Detail.aspx?soid=recs_recipe_9'), outfile)
-#print representRecipe('http://allrecipes.com/Recipe/Pizza-Casserole/Detail.aspx?soid=carousel_0_rotd&prop24=rotd')
-#print json.dumps(representRecipe('http://allrecipes.com/Recipe/Chef-Johns-Chicken-and-Biscuits/Detail.aspx?soid=carousel_0_rotd&prop24=rotd'))
 
+#Your URL goes here:
+url = 'http://allrecipes.com/recipe/easy-after-work-chicken-francaise/'
+
+#Uncomment following two lines to create json file
+with open('recipe_representation.json', 'w') as outfile:
+	json.dump(representRecipe(url), outfile)
+
+#Uncomment following line to print json object
+print json.dumps(representRecipe(url))
