@@ -6,10 +6,10 @@ import re
 import heapq
 import time
 import json
-prim_methods = ['saute', 'bake', 'grill', 'roast', 'barbeque', 'broil', 'boil', 'poach', 'freeze', 'fry', 'steam', 'smoke', 'simmer', 'blanch']
-other_methods = ['sprinkle', 'melt', 'garnish', 'chop', 'grate', 'stir', 'shake', 'mince', 'crush', 'squeeze', 'mix', 'julienne', 'dice', 'peel', 'shave', 'knead', 'blend', 'brush', 'grease', 'season', 'pour', 'grind', 'whisk', 'chill', 'drain', 'combine', 'heat', 'refrigerate']
-non_descripts = ['seeds', 'whites', 'white', 'crumbs', 'flakes', 'powder', 'salt', 'oil', 'filets', 'sauce', 'jam', 'pepper', 'cheese', 'juice', 'leaves', 'noodles', 'wine', 'sugar', 'fillets', 'thighs', 'wings']
-all_tools = ['casserole dish', 'thermometer', 'aluminum foil', 'saucepan', 'oven', 'pan', 'pot', 'wok', 'grater', 'whisk', 'ladle', 'grill', 'bowl', 'knife', 'colander', 'cutting board', 'spatula', 'funnel', 'peeler', 'strainer', 'rolling pin', 'baking dish', 'skillet', 'mortar and pestle', 'plastic wrap', 'deep-fryer', 'baking sheet', 'can opener', 'slow cooker', 'blender']
+prim_methods = ['saute', 'bake', 'grill', 'roast', 'barbeque', 'broil', 'boil', 'poach', 'freeze', 'fry', 'steam', 'smoke', 'simmer', 'blanch', 'pan-fry']
+other_methods = ['brown', 'dip', 'toss', 'serve', 'cook', 'add', 'sprinkle', 'melt', 'garnish', 'chop', 'grate', 'stir', 'shake', 'mince', 'crush', 'squeeze', 'mix', 'julienne', 'dice', 'peel', 'shave', 'knead', 'blend', 'brush', 'grease', 'season', 'pour', 'grind', 'whisk', 'chill', 'drain', 'combine', 'heat', 'refrigerate', 'grease', 'preheat', 'arrange', 'microwave', 'coat', 'baste', 'place', 'drizzle', 'roll', 'wet']
+non_descripts = ['breast', 'cutlets', 'seeds', 'whites', 'white', 'crumbs', 'flakes', 'powder', 'salt', 'oil', 'filets', 'sauce', 'jam', 'pepper', 'cheese', 'juice', 'leaves', 'noodles', 'wine', 'sugar', 'fillets', 'thighs', 'wings']
+all_tools = ['stove', 'casserole dish', 'thermometer', 'aluminum foil', 'saucepan', 'oven', 'pan', 'pot', 'wok', 'grater', 'whisk', 'ladle', 'grill', 'bowl', 'knife', 'colander', 'cutting board', 'spatula', 'funnel', 'peeler', 'strainer', 'rolling pin', 'baking dish', 'skillet', 'mortar and pestle', 'plastic wrap', 'deep-fryer', 'baking sheet', 'can opener', 'slow cooker', 'blender', 'knife', 'microwave', 'baster', 'pan', 'microwave safe bowl']
 
 def representRecipe(url):
 	soup = BeautifulSoup(urllib2.urlopen(url).read())
@@ -27,15 +27,18 @@ def getIngreds(soup):
 	ingredients = []
 	ingreds = soup.find_all('p', 'fl-ing')
 	for ing in ingreds:
-		labels = ing.find_all('span')
+		labs = ing.find_all('span')
+		labels = []
+		for lab in labs:
+			labels.append(lab.string.lower())
 		newDict = {'name': 'none', 'quantity': 'none', 'size': 'none', 'measurement': 'none', 'descriptor': 'none', 'preparation': 'none', 'prep-description': 'none'}
 		if(len(labels) > 1):
-			commas = labels[1].string.split(',')
+			commas = labels[1].split(',')
 			if commas[0] == 'skinless' or commas[0] == 'boneless':
 				chicken_name = commas[1][1:].split(' ')
 				newDict['name'] = ' '.join(chicken_name[1:3])
 				newDict['descriptor'] = commas[0] + ' and ' + chicken_name[0]
-				newDict['quantity'] = labels[0].string
+				newDict['quantity'] = labels[0]
 				newDict['measurement'] = chicken_name[-1]
 				ingredients.append(newDict)
 				continue
@@ -47,7 +50,7 @@ def getIngreds(soup):
 				count = 0
 				while count < len(name):
 					pre = name[count]
-					if pre.endswith('ed'):
+					if pre.endswith('ed') and pre != 'red':
 						preps.append(pre)
 						name.pop(count)
 					elif pre.endswith('ly'):
@@ -60,15 +63,23 @@ def getIngreds(soup):
 					if (len(name) == 2):
 						newDict['name'] = ' '.join(name)
 					else:
-						newDict['name'] = ' '.join(name[-2:])
-						newDict['descriptor'] = ' '.join(name[:-2])
+						i = -2
+						while (-1 * i) < len(name):
+							if name[i] in non_descripts:
+								i -= 1
+							else:
+								newDict['name'] = ' '.join(name[i:])
+								newDict['descriptor'] = ' '.join(name[:i])
+								break
+						else:
+							newDict['name'] = ' '.join(name)
 				else:
 					newDict['name'] = name[-1]
 					newDict['descriptor'] = ' '.join(name[:-1])
 			else:
 				newDict['name'] = name[0].lower()
 
-			meas = labels[0].string
+			meas = labels[0]
 			paran = meas.find('(')
 			if paran != -1:
 				r_par = meas.index(')')
@@ -125,7 +136,7 @@ def getIngreds(soup):
 					del prep_array[-1]
 					newDict['prep-description'] = ' '.join(prep_array)
 		else:
-			taste = labels[0].string.split(' ')
+			taste = labels[0].replace(',', '').split(' ')
 			for i in xrange(len(taste)):
 				if taste[i] == 'to':
 					newDict['name'] = ' '.join(taste[0:i])
@@ -156,11 +167,32 @@ def getSteps(soup, names):
 
 			stepDict['step'] = step
 			step = step.lower()
+			step_comma = step.split(', ')
+			del step_comma[0]
+			step_comma = map(lambda x: x.split(' ')[0], step_comma)
+			for j in step_comma:
+				if j in prim_methods:
+					check_tup = [item for item in primary if item[1] == j]
+					if check_tup:
+						tup = primary.pop(primary.index(check_tup[0]))
+						primary.append((tup[0] - 1, j))
+					else:
+						primary.append((-1, j))
+					if j not in methods:
+						methods.append(j)
+					methods_used.append(j)
+				elif j in other_methods:
+					if j not in methods:
+						methods.append(j)
+					methods_used.append(j)
+
 			split_string = re.split(',? |\.', step)
 			and_p = False
 
 			for i, j in enumerate(split_string):
-				if i == 0 or and_p:
+				if j == 'and' or j== 'then':
+					and_p = True
+				elif i == 0 or and_p:
 					and_p = False
 					if j in prim_methods:
 						check_tup = [item for item in primary if item[1] == j]
@@ -171,13 +203,13 @@ def getSteps(soup, names):
 							primary.append((-1, j))
 						if j not in methods:
 							methods.append(j)
-						methods_used.append(j)
+						if j not in methods_used:
+							methods_used.append(j)
 					elif j in other_methods:
 						if j not in methods:
 							methods.append(j)
-						methods_used.append(j)
-				elif j == 'and':
-					and_p = True
+						if j not in methods_used:
+							methods_used.append(j)
 				elif (j == 'minutes') or (j == 'seconds') or (j == 'hours') or (j == 'minute') or (j == 'second') or (j == 'hour'):
 					if 'time' in stepDict.keys():
 						stepDict['time'] += ' or '
@@ -187,25 +219,41 @@ def getSteps(soup, names):
 							stepDict['time'] += ' '.join(split_string[i-1:i+1])
 					elif split_string[i-2] == 'to' and is_number(split_string[i-1]) and is_number(split_string[i-3]):
 						stepDict['time'] = split_string[i-3] + '-' + split_string[i-1] + ' ' + j
+					elif split_string[i-1] == 'more':
+						if split_string[i-2] == 'or':
+							stepDict['time'] = split_string[i-3] + ' ' + j
+						else:
+							stepDict['time'] = split_string[i-2] + ' ' + j
 					else:
 						stepDict['time'] = ' '.join(split_string[i-1:i+1])
 
+			step_commaless = re.sub(r'\.|,', '',step).split(' ')
 			for name in names:
-				if name in step:
-					ings_used.append(name)
+				N = len(name.split(' '))
+				grams = [' '.join(step_commaless[i:i+N]) for i in xrange(len(step_commaless) - N + 1)]
+				if name in grams :
+					if name not in ings_used:
+						ings_used.append(name)
+				elif name[-1] == 's' and name[0:-1] in grams:
+					if name not in ings_used:
+						ings_used.append(name)
 				else:
 					split_name = name.split(' ')
 					if len(split_name) > 1:
 						for one_name in split_name:
 							if one_name in step and name not in ings_used and one_name != 'and':
-								ings_used.append(name)
-								continue
+								if name not in ings_used:
+									ings_used.append(name)
 
 			for tool in all_tools:
-				if tool in step:
-					tools_used.append(tool)
+				N = len(tool.split(' '))
+				grams = [' '.join(step_commaless[i:i+N]) for i in xrange(len(step_commaless) - N + 1)]
+				if tool in grams:
+					if tool not in tools_used:
+						tools_used.append(tool)
 					if tool not in tools:
 						tools.append(tool)
+
 			stepDict['ingredients used'] = ings_used
 			stepDict['tools_used'] = tools_used
 			stepDict['methods_used'] = methods_used
@@ -232,11 +280,11 @@ def returnForAutoGrader(url):
 		
 
 #Your URL goes here:
-url = 'http://allrecipes.com/recipe/easy-after-work-chicken-francaise/'
+url = None
 
 #Uncomment following two lines to create json file
-with open('recipe_representation.json', 'w') as outfile:
-	json.dump(representRecipe(url), outfile)
+#with open('recipe_representation.json', 'w') as outfile:
+#	json.dump(representRecipe(url), outfile)
 
 #Uncomment following line to print json object
-print json.dumps(representRecipe(url))
+#print json.dumps(representRecipe(url))
