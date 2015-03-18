@@ -97,11 +97,11 @@ def transformation(data,originalList,transformList, type):
 	tupleList = []
 	
 	for ingredient in data['ingredients']:
-		allIngredients.append(ingredient['name'])
+		allIngredients.append(ingredient['name'].lower())
 	
 	for ingredient in data['ingredients']:
 		for itemToReplace in originalList:
-			if itemToReplace in ingredient['name'] and ingredient['name'] not in transformList:
+			if itemToReplace in ingredient['name'].lower() and ingredient['name'].lower() not in transformList:
 				replaced = ingredient['name']
 				sub = None
 				color = None
@@ -156,7 +156,7 @@ def removeWithoutReplace(data, listToRemove):
 	for ingredient in data['ingredients']:
 		for itemToReplace in listToRemove:
 			if itemToReplace in ingredient['name']:
-				#print "Remove " +ingredient['name']
+				print "Remove " +ingredient['name']
 							
 def makeLactoseFree(data):
 	tupleList = []
